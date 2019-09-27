@@ -8,8 +8,30 @@ function [ H ] = est_homography(video_pts, logo_pts)
 %     H: a 3x3 homography matrix such that logo_pts ~ H*video_pts
 % Written for the University of Pennsylvania's Robotics:Perception course
 
-% YOUR CODE HERE
-H = [];
+
+
+% === Compute A
+num_points = size(video_pts)(1);
+A = zeros(2*num_points,9); # rows = 4x(a_x, a_y) ,cols = 9x h_ij
+
+% Construct a_x and a_y for each point
+for ii_point = 1 : num_points
+  src = video_pts(ii_point,:);
+  dst = logo_pts(ii_point,:);
+  a_x = [-src(1), -src(2), -1, 0,0,0, src(1)*dst(1), src(2)*dst(1), dst(1)];
+  a_y = [0, 0, 0, -src(1), - src(2), -1, src(1)*dst(2), src(2)*dst(2), dst(2)];
+  A(ii_point*2-1,:) = a_x;
+  A(ii_point*2,:) = a_y;
+end
+
+
+% === Compute h and H
+[U,S,V] = svd(A);
+h = V(:,9); # last column of V according to assignment code
+H = reshape(h,[3,3]);
+H = H'; # need to transpose, otherwise get matrix [11,21,31; ...] instead of [11,12,13; ...]
+
+line_for_breakpoint = 0;
 
 end
 

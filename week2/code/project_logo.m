@@ -20,7 +20,7 @@ num_ima = size(video_pts, 3);
 test_images = 1:num_ima;
 % To only test on images 1, 4 and 10, use the following line (you can edit
 % it for your desired test images)
-% test_images = [1,4,10];
+test_images = [1,10,20,30,40,50,60,70,90];
 
 num_test = length(test_images);
 
@@ -30,6 +30,11 @@ projected_imgs = cell(num_test, 1);
 
 % Process all the images
 for i=1:num_test
+    msg = ['Calculating image ', num2str(i), '/', num2str(num_test)];
+    disp(msg);
+    fflush(stdout);
+    fflush(stderr);
+      
     % Read the next video frame
     video_imgs{i} = imread(sprintf('images/barcaReal/BarcaReal%03d.jpg', i));
     
@@ -49,3 +54,10 @@ for i=1:num_test
         interior_pts,...
         warped_logo_pts); 
 end
+
+
+# display images
+#play_video(projected_imgs)
+
+# save images
+save_images(projected_imgs)

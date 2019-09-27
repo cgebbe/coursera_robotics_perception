@@ -19,8 +19,14 @@ function [ warped_pts ] = warp_pts( video_pts, logo_pts, sample_pts)
 % Complete est_homography first!
 [ H ] = est_homography(video_pts, logo_pts);
 
-% YOUR CODE HERE
-
-warped_pts = [];
+% intialize result matrix
+warped_pts = sample_pts.*0;
+num_points = size(sample_pts)(1);
+for ii_point = 1:num_points
+  src_xy = sample_pts(ii_point,:);
+  src = [src_xy(1); src_xy(2); 1];
+  dst = H * src;
+  dst_xy = [dst(1)/dst(3), dst(2)/dst(3)];
+  warped_pts(ii_point,:) = dst_xy;
 end
 

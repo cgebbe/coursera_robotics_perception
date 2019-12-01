@@ -12,16 +12,19 @@ logo_img = imread('images/logos/penn_engineering_logo.png');
 [logoy, logox, ~] = size(logo_img);
 logo_pts = [0 0; logox 0; logox logoy; 0 logoy];
 
-% Load the points that the logo corners will map onto in the main image
-load data/BarcaReal_pts.mat
+% Load the four points (x,y) of the goal corners of the video for all frames
+load data/BarcaReal_pts.mat %video_pts in 4x2x129
 num_ima = size(video_pts, 3);
 
-% Set of images to test on
-test_images = 1:num_ima;
-% To only test on images 1, 4 and 10, use the following line (you can edit
-% it for your desired test images)
-test_images = [1,10,20,30,40,50,60,70,90];
+% analyze video points
+x = squeeze(video_pts(1,:,:));
+disp(x')
 
+% Set of images to test on
+% To only test on images 1, 4 and 10, use the next line (you can edit
+% it for your desired test images)
+test_images = 1:num_ima;
+%test_images = [1,129];
 num_test = length(test_images);
 
 % Initialize the images
@@ -32,32 +35,47 @@ projected_imgs = cell(num_test, 1);
 for i=1:num_test
     msg = ['Calculating image ', num2str(i), '/', num2str(num_test)];
     disp(msg);
-    fflush(stdout);
-    fflush(stderr);
+    %fflush(stdout);
+    %fflush(stderr);
+    
+    % load 4 goal points in image
+    idx_frame = test_images(i);
+    video_pts_curr = video_pts(:,:,idx_frame);
       
     % Read the next video frame
-    video_imgs{i} = imread(sprintf('images/barcaReal/BarcaReal%03d.jpg', i));
+    video_img = imread(sprintf('images/barcaReal/BarcaReal%03d.jpg', idx_frame));
+    video_imgs{i} = video_img;
     
     % Find all points in the video frame inside the polygon defined by
     % video_pts
-    [ interior_pts ] = calculate_interior_pts(size(video_imgs{i}),...
-        video_pts(:,:,test_images(i)));
+    [ interior_pts ] = calculate_interior_pts(size(video_img),...
+        video_pts_curr);
+    
+    % Debug mode -> show image
+    hold off
+    imshow(video_img);
+    hold on
+    plot(video_pts_curr(:,1), video_pts_curr(:,2), 'rx', 'MarkerSize', 15)
+    plot(interior_pts(:,1), interior_pts(:,2), 'g.', 'MarkerSize', 1)
+    saveas(gcf,['img_debug/' num2str(i) '.png']);
     
     % Warp the interior_pts to coordinates in the logo image
-    warped_logo_pts = warp_pts(video_pts(:,:,test_images(i)),...
+    warped_logo_pts = warp_pts(video_pts_curr,...
         logo_pts,...
         interior_pts);
     
+    
     % Copy the RGB values from the logo_img to the video frame
-    projected_imgs{i} = inverse_warping(video_imgs{i},...
+    projected_img = inverse_warping(video_img,...
         logo_img,...
         interior_pts,...
         warped_logo_pts); 
+    projected_imgs{i} = projected_img;
 end
 
 
-# display images
-#play_video(projected_imgs)
+% display images
+%play_video(projected_imgs)
 
-# save images
+% save images
 save_images(projected_imgs)

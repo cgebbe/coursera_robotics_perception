@@ -1,7 +1,7 @@
 ### Coursera course "Robotics: Perception"
 This repository contains my code for the four assigned projects in the [coursera course "Robotics: Perception"](https://www.coursera.org/learn/robotics-perception), which I completed successfully.
 
-| Week                                  | Lessons                                                      | Project                                                |
+| Week                                  | Lessons                                                      | Project (with link to my code)                         |
 | ------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ |
 | Week 1: "Geometry of Image Formation" | Introduction, Camera Modeling, Single View Geometry, Perspective Projection, Vanishing Points, Point-Line Duality, Rotations and Translations, Pinhole Camera Model, Focal Length and Dolly Zoom Effect, Intrinsic Camera Parameter, 3D World to First Person, How to Compute Intrinsics from Vanishing Points, Camera Calibration | [Dolly Zoom](week1/README.md)                          |
 | Week 2: "Projective Transformations"  | How to Compute Camera Orientation from Vanishing Points, Homogeneous Coordinates, Compute Projective Transformations, Vanishing Points, Cross Ratios and Single View Metrology, Two View Soccer Metrology | [Image Projection using Homographies](week2/README.md) |

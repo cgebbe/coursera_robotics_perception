@@ -94,7 +94,15 @@ for i=1:num_frames
         imshow(video_imgs{i});
         hold on 
         plot(corners(:,1,i), corners(:,2,i), 'rx', 'MarkerSize', 15)
-        plot(proj_pts(:,1), proj_pts(:,2), 'b.', 'MarkerSize', 15)
+        plot(proj_pts(:,1), proj_pts(:,2), 'b.', 'MarkerSize', 25)
+        
+        % save
+        %parentpath= 'D:\_private\coursera_robotics_perception\week3\code\output';
+        set(gca,'LooseInset',get(gca,'TightInset'));
+        filename = sprintf('output/img_%03d.png',i);
+        %path = fullfile(parentpath, filename);
+        saveas(gcf,filename)
+        % imwrite(gcf,filename) % does not work, expects image
     end
     
     if flag_cv_installed==1
@@ -116,7 +124,6 @@ for i=1:num_frames
 
         % Copy the RGB values from the logo_img to the video frame
         generated_imgs{i} = draw_ar_cube(proj_pts,generated_imgs{i}); 
-    end
-    
+    end    
 end
 
